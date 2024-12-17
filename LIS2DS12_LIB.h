@@ -449,7 +449,7 @@ int INT2_FTH(bool mode, LIS2DS12* def);
 
 int INT2_DRDY(bool mode, LIS2DS12* def);
 
-int SETFIFO_MODE(FIFO_MODE, LIS2DS12* def);
+int SETFIFO_MODE(FIFO_MODE* mode, LIS2DS12* def);
 
 int INT2_STEP_COUNT_OV(bool mode, LIS2DS12* def);
 
@@ -476,7 +476,7 @@ typedef struct STATUS
 	};
 } STATUS;
 
-int Get_Status(LIS2DS12* def, STATUS ret);
+int Get_Status(LIS2DS12* def, STATUS *ret);
 
 uint16_t OUT_X(LIS2DS12* def);
 uint16_t OUT_Y(LIS2DS12* def);
@@ -503,7 +503,7 @@ typedef struct FIFO_THS
 
 int SET_FIFO_THS(FIFO_THS* par, LIS2DS12* def);
 
-int GET_FIFO_THS(LIS2DS12* def, FIFO_THS ret);
+int GET_FIFO_THS(LIS2DS12* def, FIFO_THS* ret);
 
 typedef struct FIFO_SRC
 {
@@ -519,7 +519,7 @@ typedef struct FIFO_SRC
 		} bits;
 	};
 } FIFO_SRC;
-int GET_FIFO_SRC(LIS2DS12* def, FIFO_SRC ret);
+int GET_FIFO_SRC(LIS2DS12* def, FIFO_SRC* ret);
 
 int GET_FIFO_SAMPLES(LIS2DS12* def, uint8_t* ret);
 
@@ -547,7 +547,7 @@ typedef struct TAP_6D_THS
 
 
 
-int SET_TAP_6D_THS(LIS2DS12* def, TAP_6D_THS par) ;
+int SET_TAP_6D_THS(LIS2DS12* def, TAP_6D_THS* par) ;
 
 
 
@@ -568,7 +568,7 @@ typedef struct INT_DUR
 } INT_DUR;
 
 int GET_INT_DUR(LIS2DS12* def, INT_DUR* ret);
-int SET_INT_DUR(LIS2DS12* def, INT_DUR par);
+int SET_INT_DUR(LIS2DS12* def, INT_DUR* par);
 
 
 
@@ -590,7 +590,7 @@ typedef struct WAKE_UP_THS
 } WAKE_UP_THS;
 
 int GET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS* ret);
-int SET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS par);
+int SET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS* par);
 
 typedef struct WAKE_UP_DUR
 {
@@ -609,7 +609,7 @@ typedef struct WAKE_UP_DUR
 } WAKE_UP_DUR;
 
 int GET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR* ret);
-int SET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR par);
+int SET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR* par);
 
 typedef enum
 {
@@ -634,7 +634,7 @@ typedef struct FREE_FALL
 
 
 int GET_FREE_FALL(LIS2DS12* def, FREE_FALL* ret);
-int SET_FREE_FALL(LIS2DS12* def, FREE_FALL par);
+int SET_FREE_FALL(LIS2DS12* def, FREE_FALL* par);
 
 
 typedef struct STATUS_DUP
@@ -740,7 +740,7 @@ typedef struct STEP_COUNTER_MINTHS
 
 
 int GET_STEP_COUNTER_MINTHS(LIS2DS12* def, STEP_COUNTER_MINTHS* ret);
-int SET_STEP_COUNTER_MINTHS(LIS2DS12* def, STEP_COUNTER_MINTHS par);
+int SET_STEP_COUNTER_MINTHS(LIS2DS12* def, STEP_COUNTER_MINTHS* par);
 
 
 int GET_STEP_COUNTER(LIS2DS12* def, uint16_t* ret);
@@ -754,7 +754,7 @@ typedef enum
 
 
 
-int GET_FUNC_CK_GATE (LIS2DS12* def, uint16_t* ret);
+int GET_FUNC_CK_GATE (LIS2DS12* def, uint8_t* ret);
 
 //   a * ( x - 1 ) =>  a * x - a * 1
 
@@ -800,7 +800,7 @@ typedef struct FUNC_CTRL
 } FUNC_CTRL;
 
 int GET_FUNC_CTRL(LIS2DS12* def, FUNC_CTRL* ret);
-int SET_FUNC_CTRL(LIS2DS12* def, FUNC_CTRL par);
+int SET_FUNC_CTRL(LIS2DS12* def, FUNC_CTRL* par);
 
 
 

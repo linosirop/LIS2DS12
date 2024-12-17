@@ -821,7 +821,7 @@ int INT2_DRDY(bool mode, LIS2DS12* def)
 
 
 
-int SETFIFO_MODE(FIFO_MODE mode, LIS2DS12* def)
+int SETFIFO_MODE(FIFO_MODE* mode, LIS2DS12* def)
 {
 	if (!def->write)
 		return ERR;
@@ -833,7 +833,8 @@ int SETFIFO_MODE(FIFO_MODE mode, LIS2DS12* def)
 	FIFO_CTRL ctrl;
 	def->read(LIS2DS12_REG_FIFO_CTRL, &ctrl.byte, 1);
 
-	ctrl.bits.mode = mode;
+	ctrl.bits.mode = *mode;
+
 
 	for (int i = 0; i < 10000; i++);
 
@@ -895,17 +896,17 @@ int IF_CS_PU_DIS(bool mode, LIS2DS12* def)
 	return def->write(LIS2DS12_REG_FIFO_CTRL, &ctrl.byte, 1);
 }
 
-int Get_Status(LIS2DS12* def, STATUS ret)
+int Get_Status(LIS2DS12* def, STATUS* ret)
 {
 
-	STATUS ctrl;
+
 	if (!def->read)
 		return ERR;
 
 	for (int i = 0; i < 10000; i++);
 
 
-	return def->read(LIS2DS12_REG_STATUS, &ctrl.byte, 1);
+	return def->read(LIS2DS12_REG_STATUS, &ret->byte, 1);
 
 
 }
@@ -961,7 +962,7 @@ int SET_FIFO_THS(FIFO_THS* par, LIS2DS12* def)
 	return def->write(LIS2DS12_REG_FIFO_THS, &par->byte, 1);
 }
 
-int GET_FIFO_THS(LIS2DS12* def, FIFO_THS ret)
+int GET_FIFO_THS(LIS2DS12* def, FIFO_THS* ret)
 {
 
 	if (!def->read)
@@ -971,12 +972,12 @@ int GET_FIFO_THS(LIS2DS12* def, FIFO_THS ret)
 
 	for (int i = 0; i < 10000; i++);
 
-	return def->read(LIS2DS12_REG_FIFO_THS, &ret.byte, 1);
+	return def->read(LIS2DS12_REG_FIFO_THS, &ret->byte, 1);
 
 
 }
 
-int GET_FIFO_SRC(LIS2DS12* def, FIFO_SRC ret)
+int GET_FIFO_SRC(LIS2DS12* def, FIFO_SRC* ret)
 {
 
 
@@ -985,7 +986,7 @@ int GET_FIFO_SRC(LIS2DS12* def, FIFO_SRC ret)
 
 	for (int i = 0; i < 10000; i++);
 
-	return def->read(LIS2DS12_REG_FIFO_SRC, &ret.byte, 1);
+	return def->read(LIS2DS12_REG_FIFO_SRC, &ret->byte, 1);
 
 
 }
@@ -998,13 +999,13 @@ int GET_FIFO_SAMPLES(LIS2DS12* def, uint8_t* ret)
 	return def->read(LIS2DS12_REG_FIFO_SAMPLES, ret, 1);
 }
 
-int SET_TAP_6D_THS(LIS2DS12* def, TAP_6D_THS par)
+int SET_TAP_6D_THS(LIS2DS12* def, TAP_6D_THS* par)
 {
 
 	if (!def->write)
 		return ERR;
 	for (int i = 0; i < 10000; i++);
-	return def->write(LIS2DS12_REG_TAP_6D_THS, &par.byte, 1);
+	return def->write(LIS2DS12_REG_TAP_6D_THS, &par->byte, 1);
 }
 int GET_INT_DUR(LIS2DS12* def, INT_DUR* ret)
 {
@@ -1013,12 +1014,12 @@ int GET_INT_DUR(LIS2DS12* def, INT_DUR* ret)
 	for (int i = 0; i < 10000; i++);
 	return def->read(LIS2DS12_REG_INT_DUR, &ret->byte, 1);
 }
-int SET_INT_DUR(LIS2DS12* def, INT_DUR par)
+int SET_INT_DUR(LIS2DS12* def, INT_DUR* par)
 {
 	if (!def->write)
 		return ERR;
 	for (int i = 0; i < 10000; i++);
-	return def->write(LIS2DS12_REG_INT_DUR, &par.byte, 1);
+	return def->write(LIS2DS12_REG_INT_DUR, &par->byte, 1);
 }
 
 int GET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS* ret)
@@ -1028,12 +1029,12 @@ int GET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS* ret)
 	for (int i = 0; i < 10000; i++);
 	return def->read(LIS2DS12_REG_WAKE_UP_THS, &ret->byte, 1);
 }
-int SET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS par)
+int SET_WAKE_UP_THS(LIS2DS12* def, WAKE_UP_THS* par)
 {
 	if (!def->write)
 		return ERR;
 	for (int i = 0; i < 10000; i++);
-	return def->write(LIS2DS12_REG_WAKE_UP_THS, &par.byte, 1);
+	return def->write(LIS2DS12_REG_WAKE_UP_THS, &par->byte, 1);
 }
 
 int GET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR* ret)
@@ -1043,12 +1044,12 @@ int GET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR* ret)
 	for (int i = 0; i < 10000; i++);
 	return def->read(LIS2DS12_REG_WAKE_UP_DUR, &ret->byte, 1);
 }
-int SET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR par)
+int SET_WAKE_UP_DUR (LIS2DS12* def, WAKE_UP_DUR* par)
 {
 	if (!def->write)
 		return ERR;
 	for (int i = 0; i < 10000; i++);
-	return def->write(LIS2DS12_REG_WAKE_UP_DUR, &par.byte, 1);
+	return def->write(LIS2DS12_REG_WAKE_UP_DUR, &par->byte, 1);
 }
 
 int GET_FREE_FALL(LIS2DS12* def, FREE_FALL* ret)
@@ -1058,12 +1059,12 @@ int GET_FREE_FALL(LIS2DS12* def, FREE_FALL* ret)
 	for (int i = 0; i < 10000; i++);
 	return def->read(LIS2DS12_REG_FREE_FALL, &ret->byte, 1);
 }
-int SET_FREE_FALL(LIS2DS12* def, FREE_FALL par)
+int SET_FREE_FALL(LIS2DS12* def, FREE_FALL* par)
 {
 	if (!def->write)
 		return ERR;
 	for (int i = 0; i < 10000; i++);
-	return def->write(LIS2DS12_REG_FREE_FALL, &par.byte, 1);
+	return def->write(LIS2DS12_REG_FREE_FALL, &par->byte, 1);
 }
 
 int GET_STATUS_DUP(LIS2DS12* def, STATUS_DUP* ret)
@@ -1107,14 +1108,14 @@ int GET_STEP_COUNTER_MINTHS(LIS2DS12* def, STEP_COUNTER_MINTHS* ret)
 
 	return def->read(LIS2DS12_REG_STEP_COUNTER_MINTHS, &ret->byte, 1);
 }
-int SET_STEP_COUNTER_MINTHS(LIS2DS12* def, STEP_COUNTER_MINTHS par)
+int SET_STEP_COUNTER_MINTHS(LIS2DS12* def, STEP_COUNTER_MINTHS* par)
 {
 	if (!def->write)
 		return ERR;
 
 	for (int i = 0; i < 10000; i++);
 
-	return def->write(LIS2DS12_REG_STEP_COUNTER_MINTHS, &par.byte, 1);
+	return def->write(LIS2DS12_REG_STEP_COUNTER_MINTHS, &par->byte, 1);
 }
 
 int GET_STEP_COUNTER(LIS2DS12* def, uint16_t* ret)
@@ -1124,16 +1125,18 @@ int GET_STEP_COUNTER(LIS2DS12* def, uint16_t* ret)
 
 	for (int i = 0; i < 10000; i++);
 	uint8_t a,b;
-	def->read(LIS2DS12_REG_STEP_COUNTER_L, &a, 1);
+	int status = def->read(LIS2DS12_REG_STEP_COUNTER_L, &a, 1);
+	if (status != 0)
+		return ERR;
 	for (int i = 0; i < 10000; i++);
-	def->read(LIS2DS12_REG_STEP_COUNTER_L, &b, 1);
-
+	status = def->read(LIS2DS12_REG_STEP_COUNTER_L, &b, 1);
+	return status;
 	a = (((uint16_t)b << 8) | (uint16_t)a);
 }
 
 ////////
 
-int GET_FUNC_CK_GATE (LIS2DS12* def, uint16_t* ret)
+int GET_FUNC_CK_GATE (LIS2DS12* def, uint8_t* ret)
 {
 	if (!def->read)
 			return ERR;
@@ -1162,12 +1165,12 @@ int GET_FUNC_CTRL(LIS2DS12* def, FUNC_CTRL* ret)
 
 	return def->read(LIS2DS12_REG_FUNC_CTRL, &ret->byte, 1);
 }
-int SET_FUNC_CTRL(LIS2DS12* def, FUNC_CTRL par)
+int SET_FUNC_CTRL(LIS2DS12* def, FUNC_CTRL* par)
 {
 	if (!def->write)
 		return ERR;
 
 	for (int i = 0; i < 10000; i++);
 
-	return def->write(LIS2DS12_REG_FUNC_CTRL, &par.byte, 1);
+	return def->write(LIS2DS12_REG_FUNC_CTRL, &par->byte, 1);
 }
