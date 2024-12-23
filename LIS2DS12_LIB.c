@@ -38,9 +38,9 @@ int LIS2DS12_SetCTRL1(LIS2DS12_CTRL_1* par, LIS2DS12* def)
 }
 int LIS2DS12_SetCTRL2(LIS2DS12_CTRL_2* par, LIS2DS12* def)
 {
-	//	b1 -> BOOT RELIS2DS12_-> Forces the reboot of the flash content in the trimming and configuration registers.
-	//	b2 -> 0 -> This bit must be LIS2DS12_ to ‘0’ for the correct operation of the device
-	//	b3 -> SOFT_RELIS2DS12_ -> Soft reLIS2DS12_ acts as reLIS2DS12_ for all control registers, then goes to 0. Default value: 0 (0: disabled; 1: enabled)
+	//	b1 -> BOOT RESET-> Forces the reboot of the flash content in the trimming and configuration registers.
+	//	b2 -> 0 -> This bit must be set to ‘0’ for the correct operation of the device
+	//	b3 -> SOFT_RESET -> Soft reset acts as reset for all control registers, then goes to 0. Default value: 0 (0: disabled; 1: enabled)
 	//	b4 -> FUNC_CFG_EN -> Access to pedometer/sensor hub advanced configuration registers from address 2Bh to 3Fh. Default value: 0 (0: disable the access to pedometer/sensor hub advanced configuration registers; 1: enable the access to pedometer/sensor hub advanced configuration registers)
 	//	b5 -> FDS_SLOPE -> High-pass filter data selection on output register and FIFO. Default value: 0 (0: internal filter bypassed; 1: internal filter enabled on output register and FIFO)
 	//	b6 -> IF_ADD_INC -> Register address automatically incremented during multiple byte access with a serial interface (I 2C or SPI). Default value: 1 (0: disabled; 1: enabled)
@@ -128,10 +128,10 @@ int LIS2DS12_SetFIFO_CTRL(LIS2DS12_FIFO_CTRL* par, LIS2DS12* def)
 	//  CONTINUOUS TO FIFO   - > STREAM MODE until trigger is deasserted then FIFO modeContinuous-to-FIFO: Stream mode until trigger is deasserted, then FIFO mode
 	//  BYPASS TO CONTINUOUS - > Bypass mode until trigger is deasserted, then FIFO modeBypass-to-Continuous: Bypass mode until trigger is deasserted, then FIFO mode
 	//  CONTINIOUS_MODE		 - >  Data If the FIFO is full, the new sample over writes the older sampleContinuous mode: data If the FIFO is full, the new sample over- writes the older sample.
-	//	b4 -> INT2_STEP_COUNT_OV		 - > Step counter overflow interrupt enable on INT2
-	//	b5 -> MODULE_TO_FIFO -> When LIS2DS12_ to '1'-logic, module routine result is send to FIFO instead of X,Y,Z acceleration data
-	//	b6 -> This bit must be LIS2DS12_ to '0' for correct device operation.
-	//	b7 -> This bit must be LIS2DS12_ to '0' for correct device operation.
+	//	b4 -> INT2_STEP_COUNT_OV  - > Step counter overflow interrupt enable on INT2
+	//	b5 -> MODULE_TO_FIFO -> When set to '1'-logic, module routine result is send to FIFO instead of X,Y,Z acceleration data
+	//	b6 -> This bit must be set to '0' for correct device operation.
+	//	b7 -> This bit must be set to '0' for correct device operation.
 	//	b8 -> IF_CS_PU_DIS -> When '1'-logic disconnects pull-up in if_cs pad. Default: 0
 
 	if (!def->write)
