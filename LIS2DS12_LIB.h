@@ -5,19 +5,13 @@
 #define NULL         ((void *) 0)
 #endif
 #endif
-#ifndef TRUE
-#define TRUE                                      UINT8_C(1)
-#endif
-#ifndef FALSE
-#define FALSE                                     UINT8_C(0)
-#endif
+
 
 ///  В данном примере используется учебная плата MiniZed в качестве ведущего устройства с использованием акселерометра
 
 #include "xparameters.h"
 #include "xiicps.h"
 #include "xil_printf.h"
-
 #include <stdbool.h>
 
 /// 1. Настройка макросов
@@ -26,88 +20,15 @@
 #define ERR -1
 
 
-
 #define LIS2DS12_REG_WHO_AM_I                       UINT8_C(0x0F)
 #define WHO_AM_I_NORM_VALUE                         UINT8_C(0b01000011)
 
-
-
 #define LIS2DS12_REG_CTRL_1                         UINT8_C(0x20)
-
-
-#define	ODR_HZ_PD                                   0
-
-#define	ODR_HZ_LP_1 								0b1000
-#define	ODR_HZ_LP_12_5 								0b1001
-#define	ODR_HZ_LP_25						   		0b1010
-#define	ODR_HZ_LP_50 								0b1011
-#define	ODR_HZ_LP_100 								0b1100
-#define	ODR_HZ_LP_200 								0b1101
-#define	ODR_HZ_LP_400 								0b1110
-#define	ODR_HZ_LP_800 								0b1111
-
-#define	ODR_HZ_HR_12_5								0b0001
-#define	ODR_HZ_HR_25 								0b0010
-#define	ODR_HZ_HR_50 								0b0011
-#define	ODR_HZ_HR_100 								0b0100
-#define	ODR_HZ_HR_200 								0b0101
-#define	ODR_HZ_HR_400 								0b0110
-#define	ODR_HZ_HR_800								0b0111
-
-#define	ODR_HF_1600 								0b0101
-#define	ODR_HF_3200 								0b0110
-#define	ODR_HF_6400									0b0111
-
-#define FS_2_DEF                                    UINT8_C(0b00)
-#define FS_4_DEF                                    UINT8_C(0b10)
-#define FS_8_DEF                                    UINT8_C(0b11)
-#define FS_16_DEF                                   UINT8_C(0b01)
-#define HF_ODR_DEF                                  UINT8_C(1 << 1)
-
-
-
 #define LIS2DS12_REG_CTRL_2                         UINT8_C(0x21)
-
-
-#define BOOT_DEF 									UINT8_C(1 << 7)
-#define SOFT_RESET_DEF 								UINT8_C(1 << 6)
-#define FUNC_CFG_EN_DEF 							UINT8_C(1 << 4)
-#define FDS_SLOPE_DEF 								UINT8_C(1 << 3)
-#define IF_ADD_INC_DEF								UINT8_C(1 << 2)
-#define I2C_DISABLE_DEF 							UINT8_C(1 << 1)
-#define I2C_ENABLE_DEF 								UINT8_C(0b11111101)
-#define SIM_DEF 									UINT8_C(1)
-#define AGREE_UPGRATE_PEDOMETR_SETTINGS_DEF			UINT8_C(1 << 5)
-#define DISAGREE_UPGRATE_PEDOMETR_SETTINGS_DEF		UINT8_C(0b11011111)
-
-
-
 #define LIS2DS12_REG_CTRL_3                         UINT8_C(0x22)
-
-
-#define TAPX_ENABLE_DEF      				  			    UINT8_C(1 << 5)
-#define TAPX_DISABLE_DEF      				  			    UINT8_C(0b11011111)
-#define TAPY_ENABLE_DEF      				  				UINT8_C(1 << 4)
-#define TAPY_DISABLE_DEF      				  				UINT8_C(0b11101111)
-#define TAPZ_ENABLE_DEF     				  				UINT8_C(1 << 3)
-#define TAPZ_DISABLE_DEF     				  				UINT8_C(0b11110111)
-#define LIR_DEF      				  				UINT8_C(1 << 2)
-#define H_LACTIVE_DEF       				  		UINT8_C(1 << 1)
-#define PP_OD_DEF      				  				UINT8_C(1)
-
-
-
 #define LIS2DS12_REG_CTRL_4                         UINT8_C(0x23)
-
-
-
 #define LIS2DS12_REG_CTRL_5                         UINT8_C(0x24)
-
-
-
 #define LIS2DS12_REG_FIFO_CTRL                      UINT8_C(0x25)
-
-
 
 #define LIS2DS12_REG_OUT_TEMP      				    UINT8_C(0x26)
 #define LIS2DS12_REG_STATUS                         UINT8_C(0x27)
@@ -132,10 +53,6 @@
 #define LIS2DS12_REG_FUNC_SRC                       UINT8_C(0x3E)
 #define LIS2DS12_REG_FUNC_CTRL                      UINT8_C(0x3F)
 
-
-
-
-
 typedef int (*LISWRITE)(uint8_t reg_addr, const uint8_t* reg_data, uint32_t len);
 typedef int (*LISREAD)(uint8_t reg_addr, uint8_t* reg_data, uint32_t len);
 typedef int (*LISRESET)(uint8_t reg_addr, uint8_t* reg_data, uint32_t len);
@@ -155,8 +72,8 @@ int LIS2DS12_Check_WIA(LIS2DS12* def); // 1 -> good, 0 -> bad
 
 
 ////// CTRL1  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///   |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///   V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef enum
 {
@@ -208,20 +125,22 @@ typedef struct LIS2DS12_CTRL_1
 
 int LIS2DS12_SetCTRL1(LIS2DS12_CTRL_1* par, LIS2DS12* def);
 
-////// CTRL2  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-//	b1 -> BOOT_RESET -> Forces the reboot of the flash content in the trimming and configuration registers.
-//	b2 -> SOFT_RESET -> Soft reset acts as reset for all control registers, then goes to 0. Default value: 0 (0: disabled; 1: enabled)
-//	b3 -> 0 -> This bit must be set to ‘0’ for the correct operation of the device
-//	b4 -> FUNC_CFG_EN -> Access to pedometer/sensor hub advanced configuration registers from address 2Bh to 3Fh. Default value: 0 (0: disable the access to pedometer/sensor hub advanced configuration registers; 1: enable the access to pedometer/sensor hub advanced configuration registers)
-//	b5 -> FDS_SLOPE -> High-pass filter data selection on output register and FIFO. Default value: 0 (0: internal filter bypassed; 1: internal filter enabled on output register and FIFO)
-//	b6 -> IF_ADD_INC -> Register address automatically incremented during multiple byte access with a serial interface (I 2C or SPI). Default value: 1 (0: disabled; 1: enabled)
-//	b7 -> I2C_DISABLE -> Disable I2C communication protocol. Default value: 0 (0: SPI and I2C interfaces enabled; 1: I 2C mode disabled)
-//	b8 -> SIM -> SPI serial interface mode selection. Default value: 0 0: 4-wire interface; 1: 3-wire interface
-
+/***********************************************************************************
+* /// CTRL2  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*    |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*    V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*
+*
+*	b1 -> BOOT_RESET -> Forces the reboot of the flash content in the trimming and configuration registers.
+*	b2 -> SOFT_RESET -> Soft reset acts as reset for all control registers, then goes to 0. Default value: 0 (0: disabled; 1: enabled)
+*	b3 -> 0 -> This bit must be set to ‘0’ for the correct operation of the device
+*	b4 -> FUNC_CFG_EN -> Access to pedometer/sensor hub advanced configuration registers from address 2Bh to 3Fh. Default value: 0 (0: disable the access to pedometer/sensor hub advanced configuration registers; 1: enable the access to pedometer/sensor hub advanced configuration registers)
+*	b5 -> FDS_SLOPE -> High-pass filter data selection on output register and FIFO. Default value: 0 (0: internal filter bypassed; 1: internal filter enabled on output register and FIFO)
+*	b6 -> IF_ADD_INC -> Register address automatically incremented during multiple byte access with a serial interface (I 2C or SPI). Default value: 1 (0: disabled; 1: enabled)
+*	b7 -> I2C_DISABLE -> Disable I2C communication protocol. Default value: 0 (0: SPI and I2C interfaces enabled; 1: I 2C mode disabled)
+*	b8 -> SIM -> SPI serial interface mode selection. Default value: 0 0: 4-wire interface; 1: 3-wire interface
+***********************************************************************************/
 typedef struct LIS2DS12_CTRL_2
 {
 	union
@@ -235,7 +154,7 @@ typedef struct LIS2DS12_CTRL_2
 			uint8_t IF_ADD_INC : 1;
 			uint8_t FDS_SLOPE : 1;
 			uint8_t FUNC_CFG_EN : 1;
-			uint8_t b3 : 1; // must be 0
+			uint8_t UPGRATE_PEDOMETR_SETTINGS : 1;
 			uint8_t SOFT_RESET : 1;
 			uint8_t BOOT_RESET : 1;
 		} bits;
@@ -244,31 +163,31 @@ typedef struct LIS2DS12_CTRL_2
 
 int LIS2DS12_SetCTRL2(LIS2DS12_CTRL_2* par, LIS2DS12* def);
 
-
-////// CTRL3  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//  NORMAL MODE
-//	b1 -> 0
-//	b2 -> 0
-//  POSITIVE SIGN SELF-TEST
-//	b1 -> 0
-//	b2 -> 1
-//  NEGATIVE SIGN SELF-TEST
-//	b1 -> 1
-//	b2 -> 0
-//  NOT ALLOWED
-//	b1 -> 1
-//	b2 -> 1
-
-//	b3 -> TAPX -> Tap recognition on X direction enable. (0: disabled; 1: enabled)
-//	b4 -> TAPY -> Tap recognition on Y direction enable. (0: disabled; 1: enabled)
-//	b5 -> TAPZ -> Tap recognition on Z direction enable. (0: disabled; 1: enabled)
-//	b6 -> LIR -> Latched Interrupt (0: disabled; 1: enabled)
-//	b7 -> H_LACTIVE -> Interrupt active high, low. (0: active high; 1: active low)
-//	b8 -> PP_OD -> Push-pull/open-drain selection on interrupt pad. (0: push-pull; 1: open-drain)
-
+/***********************************************************************************
+* //// CTRL3  //////////////////////////////////////////////////////////////////////
+*     |  |  | //////////////////////////////////////////////////////////////////////
+*     V  V  V //////////////////////////////////////////////////////////////////////
+*
+*  NORMAL MODE
+*	b1 -> 0
+*	b2 -> 0
+*  POSITIVE SIGN SELF-TEST
+*	b1 -> 0
+*	b2 -> 1
+*  NEGATIVE SIGN SELF-TEST
+*	b1 -> 1
+*	b2 -> 0
+*  NOT ALLOWED
+*	b1 -> 1
+*	b2 -> 1
+*
+*	b3 -> TAPX -> Tap recognition on X direction enable. (0: disabled; 1: enabled)
+*	b4 -> TAPY -> Tap recognition on Y direction enable. (0: disabled; 1: enabled)
+*	b5 -> TAPZ -> Tap recognition on Z direction enable. (0: disabled; 1: enabled)
+*	b6 -> LIR -> Latched Interrupt (0: disabled; 1: enabled)
+*	b7 -> H_LACTIVE -> Interrupt active high, low. (0: active high; 1: active low)
+*	b8 -> PP_OD -> Push-pull/open-drain selection on interrupt pad. (0: push-pull; 1: open-drain)
+***********************************************************************************/
 typedef enum
 {
 
@@ -299,20 +218,23 @@ int LIS2DS12_SetCTRL3(LIS2DS12_CTRL_3* par, LIS2DS12* def);
 
 
 
-////// CTRL4  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// b1 -> INT1_MASTER_DRDY -> Manage the Master DRDY signal on INT1 pad.
-// b2 -> INT1_S_TAP       -> Single-tap recognition is routed on INT1 pad
-// b3 -> INT1_WU		  -> Wakeup recognition is routed on INT1 pad
-// b4 -> INT1_FF		  -> Free-fall recognition is routed on INT1 pad
-// b5 -> INT1_TAP		  -> Double-tap recognition is routed on INT1 pad
-// b6 -> INT1_6D		  -> 6D recognition is routed on INT1 pad
-// b7 -> INT1_FTH		  -> FIFO threshold interrupt is routed on INT1 pad
-// b8 -> INT1_DRDY		  -> Data-Ready is routed on INT1 pad
-
+/***********************************************************************************
+* //////  CTRL4  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*        |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*        V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*
+*
+* b1 -> INT1_MASTER_DRDY  -> Manage the Master DRDY signal on INT1 pad.
+* b2 -> INT1_S_TAP        -> Single-tap recognition is routed on INT1 pad
+* b3 -> INT1_WU		 	  -> Wakeup recognition is routed on INT1 pad
+* b4 -> INT1_FF		 	  -> Free-fall recognition is routed on INT1 pad
+* b5 -> INT1_TAP		  -> Double-tap recognition is routed on INT1 pad
+* b6 -> INT1_6D		 	  -> 6D recognition is routed on INT1 pad
+* b7 -> INT1_FTH		  -> FIFO threshold interrupt is routed on INT1 pad
+* b8 -> INT1_DRDY		  -> Data-Ready is routed on INT1 pad
+***********************************************************************************/
 typedef struct LIS2DS12_CTRL_4
 {
 	union
@@ -334,20 +256,22 @@ typedef struct LIS2DS12_CTRL_4
 
 int LIS2DS12_SetCTRL4(LIS2DS12_CTRL_4* par, LIS2DS12* def);
 
-////// CTRL5  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//    V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-// b1 ->  DRDY_PULSED	 -> Manage the Master DRDY signal on INT1 pad.
-// b2 ->  INT2_BOOT      -> Single-tap recognition is routed on INT1 pad
-// b3 ->  INT2_ON_INT1	 -> Wakeup recognition is routed on INT1 pad
-// b4 ->  INT2_TILT		 -> Free-fall recognition is routed on INT1 pad
-// b5 ->  INT2_SIG_MOT   -> Double-tap recognition is routed on INT1 pad
-// b6 ->  INT2_STEP_DET  -> 6D recognition is routed on INT1 pad
-// b7 ->  INT2_FTH		 -> FIFO threshold interrupt is routed on INT1 pad
-// b8 ->  INT2_DRDY		 -> Data-Ready is routed on INT1 pad
-
+/***********************************************************************************
+* ////  CTRL5  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*      |  |  | ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*      V  V  V ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+*
+*
+* b1 ->  DRDY_PULSED	 -> Manage the Master DRDY signal on INT1 pad.
+* b2 ->  INT2_BOOT      -> Single-tap recognition is routed on INT1 pad
+* b3 ->  INT2_ON_INT1	 -> Wakeup recognition is routed on INT1 pad
+* b4 ->  INT2_TILT		 -> Free-fall recognition is routed on INT1 pad
+* b5 ->  INT2_SIG_MOT   -> Double-tap recognition is routed on INT1 pad
+* b6 ->  INT2_STEP_DET  -> 6D recognition is routed on INT1 pad
+* b7 ->  INT2_FTH		 -> FIFO threshold interrupt is routed on INT1 pad
+* b8 ->  INT2_DRDY		 -> Data-Ready is routed on INT1 pad
+***********************************************************************************/
 typedef struct LIS2DS12_CTRL_5
 {
 	union
@@ -369,19 +293,15 @@ typedef struct LIS2DS12_CTRL_5
 
 int LIS2DS12_SetCTRL5(LIS2DS12_CTRL_5* par, LIS2DS12* def);
 
-////// FIFO_CTRL ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     |  |  |   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//     V  V  V   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 typedef enum
 {
-		MODE_BYPASS = 0b000, MODE_FIFO = 0b001,
-		CONTINUOUS_TO_FIFO = 0b011, BYPASS_TO_CONTINUOUS = 0b100, MODE_CONTINIOUS = 0b110
-		//BYPASS MODE - > FIFO turned off
-		//FIFO MODE - > Stops_collecting data when FIFO is full
-		//CONTINUOUS TO FIFO - > STREAM MODE until trigger is deasserted then FIFO mode
-		//BYPASS TO CONTINUOUS - > Bypass mode until trigger is deasserted, then FIFO mode
-		//CONTINIOUS_MODE - >  Data If the FIFO is full, the new sample over writes the older sample
+		MODE_BYPASS = 0b000, //!< BYPASS MODE - > FIFO turned off
+		MODE_FIFO = 0b001, //!< FIFO MODE - > Stops_collecting data when FIFO is full
+		CONTINUOUS_TO_FIFO = 0b011, //!< CONTINUOUS TO FIFO - > STREAM MODE until trigger is deasserted then FIFO mode
+		BYPASS_TO_CONTINUOUS = 0b100, //!< BYPASS TO CONTINUOUS - > Bypass mode until trigger is deasserted, then FIFO mode
+		MODE_CONTINIOUS = 0b110 //!< CONTINIOUS_MODE - >  Data If the FIFO is full, the new sample over writes the older sample
 }LIS2DS12_FIFO_MODE;
 
 typedef struct LIS2DS12_FIFO_CTRL
@@ -403,85 +323,6 @@ typedef struct LIS2DS12_FIFO_CTRL
 
 int LIS2DS12_SetFIFO_CTRL(LIS2DS12_FIFO_CTRL* par, LIS2DS12* def);
 
-int LIS2DS12_GetTemp();
-
-int LIS2DS12_SetODR(LIS2DS12_ODR_Hz ODR, LIS2DS12_ODR_Hz_MODE mode, LIS2DS12* def);
-
-int LIS2DS12_SetFS(LIS2DS12_FS fs, LIS2DS12* def);
-
-int LIS2DS12_SetHF_ODR(bool LIS2DS12_HF_ODR, LIS2DS12* def);
-
-int LIS2DS12_SetBDU(bool BDU, LIS2DS12* def);
-
-int LIS2DS12_BOOTRESET(LIS2DS12* def);
-
-int LIS2DS12_SOFT_RESET(LIS2DS12* def);
-
-int LIS2DS12_UPGRATE_PEDOMETR_SETTINGS(bool mode, LIS2DS12* def);// mode - > on\off 1\0
-
-int LIS2DS12_FUNC_CFG_EN(bool mode, LIS2DS12* def);// mode - > on\off 1\0
-
-int LIS2DS12_FDS_SLOPE(bool mode, LIS2DS12* def);// mode - > on\off 1\0
-
-int LIS2DS12_IF_ADD_INC(bool mode, LIS2DS12* def);// mode - > on\off 1\0
-
-int LIS2DS12_I2C_SWICH(bool mode, LIS2DS12* def);// mode - > on\off 1\0
-
-int LIS2DS12_SIM(bool mode, LIS2DS12* def);// mode - > on\off 1\0
-
-int LIS2DS12_SELF_TEST_ENABLE(LIS2DS12_SELF_TEST_MODE mode, LIS2DS12* def);
-
-int LIS2DS12_TAP_X(bool mode, LIS2DS12* def);
-
-int LIS2DS12_TAP_Y(bool mode, LIS2DS12* def);
-
-int LIS2DS12_TAP_Z(bool mode, LIS2DS12* def);
-
-int LIS2DS12_LIR(bool mode, LIS2DS12* def);
-
-int LIS2DS12_H_LACTIVE(bool mode, LIS2DS12* def);
-
-int LIS2DS12_PP_OD(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_MASTER_DRDY(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_S_TAP(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_WU(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_FF(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_TAP(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_6D(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_FTH(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT1_DRDY(bool mode, LIS2DS12* def);
-
-int LIS2DS12_DRDY_PULSED(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_BOOT(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_ON_INT1(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_TILT(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_SIG_MOT(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_STEP_DET(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_FTH(bool mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_DRDY(bool mode, LIS2DS12* def);
-
-int LIS2DS12_SETFIFO_MODE(LIS2DS12_FIFO_MODE* mode, LIS2DS12* def);
-
-int LIS2DS12_INT2_STEP_COUNT_OV(bool mode, LIS2DS12* def);
-
-int LIS2DS12_MODULE_TO_FIFO(bool mode, LIS2DS12* def);
-
-int LIS2DS12_IF_CS_PU_DIS(bool mode, LIS2DS12* def);
 
 typedef struct LIS2DS12_STATUS
 {
@@ -803,8 +644,8 @@ typedef struct LIS2DS12_FUNC_SRC
 		} bits;
 	};
 } LIS2DS12_FUNC_SRC;
-int LIS2DS12_GET_FUNC_SRC (LIS2DS12* def, LIS2DS12_FUNC_SRC* ret);
 
+int LIS2DS12_GET_FUNC_SRC (LIS2DS12* def, LIS2DS12_FUNC_SRC* ret);
 
 typedef struct LIS2DS12_FUNC_CTRL
 {
@@ -826,7 +667,85 @@ typedef struct LIS2DS12_FUNC_CTRL
 } LIS2DS12_FUNC_CTRL;
 
 int LIS2DS12_GET_FUNC_CTRL(LIS2DS12* def, LIS2DS12_FUNC_CTRL* ret);
+
 int LIS2DS12_SET_FUNC_CTRL(LIS2DS12* def, LIS2DS12_FUNC_CTRL* par);
 
+int LIS2DS12_GetTemp();
 
+int LIS2DS12_SetODR(LIS2DS12_ODR_Hz ODR, LIS2DS12_ODR_Hz_MODE mode, LIS2DS12* def);
 
+int LIS2DS12_SetFS(LIS2DS12_FS fs, LIS2DS12* def);
+
+int LIS2DS12_SetHF_ODR(bool LIS2DS12_HF_ODR, LIS2DS12* def);
+
+int LIS2DS12_SetBDU(bool BDU, LIS2DS12* def);
+
+int LIS2DS12_BOOTRESET(LIS2DS12* def);
+
+int LIS2DS12_SOFT_RESET(LIS2DS12* def);
+
+int LIS2DS12_UPGRATE_PEDOMETR_SETTINGS(bool mode, LIS2DS12* def);//!< mode - > on\off 1\0
+
+int LIS2DS12_FUNC_CFG_EN(bool mode, LIS2DS12* def);//!< mode - > on\off 1\0
+
+int LIS2DS12_FDS_SLOPE(bool mode, LIS2DS12* def);//!< mode - > on\off 1\0
+
+int LIS2DS12_IF_ADD_INC(bool mode, LIS2DS12* def);//!< mode - > on\off 1\0
+
+int LIS2DS12_I2C_SWICH(bool mode, LIS2DS12* def);//!< mode - > on\off 1\0
+
+int LIS2DS12_SIM(bool mode, LIS2DS12* def);//!< mode - > on\off 1\0
+
+int LIS2DS12_SELF_TEST_ENABLE(LIS2DS12_SELF_TEST_MODE mode, LIS2DS12* def);
+
+int LIS2DS12_TAP_X(bool mode, LIS2DS12* def);
+
+int LIS2DS12_TAP_Y(bool mode, LIS2DS12* def);
+
+int LIS2DS12_TAP_Z(bool mode, LIS2DS12* def);
+
+int LIS2DS12_LIR(bool mode, LIS2DS12* def);
+
+int LIS2DS12_H_LACTIVE(bool mode, LIS2DS12* def);
+
+int LIS2DS12_PP_OD(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_MASTER_DRDY(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_S_TAP(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_WU(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_FF(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_TAP(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_6D(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_FTH(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT1_DRDY(bool mode, LIS2DS12* def);
+
+int LIS2DS12_DRDY_PULSED(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_BOOT(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_ON_INT1(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_TILT(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_SIG_MOT(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_STEP_DET(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_FTH(bool mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_DRDY(bool mode, LIS2DS12* def);
+
+int LIS2DS12_SETFIFO_MODE(LIS2DS12_FIFO_MODE* mode, LIS2DS12* def);
+
+int LIS2DS12_INT2_STEP_COUNT_OV(bool mode, LIS2DS12* def);
+
+int LIS2DS12_MODULE_TO_FIFO(bool mode, LIS2DS12* def);
+
+int LIS2DS12_IF_CS_PU_DIS(bool mode, LIS2DS12* def);
