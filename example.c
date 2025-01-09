@@ -18,6 +18,7 @@
 
 
 XIicPs Iic;
+
 // Пример использования датчика с одноразовом выводом температуры и постоянным
 // выводом раз в секунду ускорения по осям x,y,z
 
@@ -46,7 +47,6 @@ int read(uint8_t reg_addr, uint8_t* reg_data, uint32_t len)
 
 int main(void)
 {
-
 
 	LIS2DS12 def;
 	def.read = read;
@@ -82,7 +82,6 @@ int main(void)
 			xil_printf("WIM PORT IS NOT NORMAL\n");
 
 		/// CNTRL 1
-		/// ODR register setting: power down (PD) and low power (LP)
 
 		LIS2DS12_CTRL_1 ctrl1;
 
@@ -106,13 +105,11 @@ int main(void)
 		ctrl3.bits.mode = POSITIVE_SIGN_SELF_TEST;
 		LIS2DS12_SetCTRL3(&ctrl3, &def);
 
-
 		// CTRL 4
 
 		LIS2DS12_CTRL_4 ctrl4;
 		ctrl4.byte = 0x01;
 		LIS2DS12_SetCTRL4(&ctrl4, &def);
-
 
 	    //FIFO_CTRL
 
@@ -123,11 +120,15 @@ int main(void)
 		///TEMP
 
 		int temp = LIS2DS12_GetTemp(&def);
+
+		///
+
 		printf("\nTemp = %d\nPress any key:\n", temp);
 		getchar();
+
 		LIS2DS12_STATUS stat;
 		stat.byte = 0;
-
+		int i;
 		while(1)
 		{
 			do
@@ -135,24 +136,21 @@ int main(void)
 			LIS2DS12_Get_Status(&def, &stat);
 			}while(stat.bits.DRDY != 1);
 
-					u16 x,y,z;
+					u16 x = 0, y = 0, z = 0;
 
-				/// x
+					for(i = 0; i < 10; i++)
+					{
+				     /// x
+					x += LIS2DS12_OUT_X(&def)* 0.061;
+				     /// y
+					y += LIS2DS12_OUT_Y(&def)* 0.061;
+			         /// z
+					z += LIS2DS12_OUT_Z(&def)* 0.061;
+					}
 
-					x = LIS2DS12_OUT_X(&def);
-
-				/// y
-
-					y = LIS2DS12_OUT_Y(&def);
-
-			    /// z
-
-					z = LIS2DS12_OUT_Z(&def);
-
-
-			        x = x * 0.061;
-		   			y = y * 0.061;
-					z = z * 0.061;
+					x /= 10;
+					y /= 10;
+					z /= 10;
 
 					printf("Axis acceleration: x = %d   y = %d   z = %d\n", x ,y ,z );
 

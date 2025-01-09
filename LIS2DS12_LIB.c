@@ -909,7 +909,6 @@ uint16_t LIS2DS12_OUT_X(LIS2DS12* def)
 	if (!def->read)
 		return ERR;
 
-	for (int i = 0; i < 1500; i++);
 
 	uint8_t buf[2];
 
@@ -918,12 +917,13 @@ uint16_t LIS2DS12_OUT_X(LIS2DS12* def)
 	return (((uint16_t)(buf[1]) << 8) | (uint16_t)(buf[0])) >> 2;
 
 }
+
+
 uint16_t LIS2DS12_OUT_Y(LIS2DS12* def)
 {
 	if (!def->read)
 		return ERR;
 
-	for (int i = 0; i < 1500; i++);
 
 	uint8_t buf[2];
 
@@ -935,8 +935,6 @@ uint16_t LIS2DS12_OUT_Z(LIS2DS12* def)
 {
 	if (!def->read)
 		return ERR;
-
-	for (int i = 0; i < 1500; i++);
 
 	uint8_t buf[2];
 
